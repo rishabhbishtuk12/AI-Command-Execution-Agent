@@ -1,0 +1,6 @@
+.env
+.venv
+env
+snake-game-webpage/node_modules
+snake-game-webpage/.parcel-cache
+snake-game-webpage/dist

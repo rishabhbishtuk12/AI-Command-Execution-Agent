@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake Game</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      body {
+        background-color: #a8e6a8;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      #gameCanvas {
+        border: solid 4px #006400;
+        background-color: #f4f4f9;
+        flex-grow: 1;
+      }
+      #gameOverModal {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+      .modal-content {
+        background-color: white;
+        padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+      .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #004d00;
+        color: white;
+        z-index: 1000;
+      }
+      .buttons {
+        display: flex;
+        gap: 10px;
+      }
+      .button {
+        padding: 8px 16px;
+        font-size: 14px;
+        color: #ffffff;
+        background-color: #006400;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+      }
+      .button:hover {
+        background-color: #004d00;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <div class="info">
+        Player: <span id="playerNameDisplay"></span> | Highest Score:
+        <span id="highestScoreName"></span>
+      </div>
+      <div class="buttons">
+        <a href="index.html" class="button">Exit</a>
+        <a href="score.html" class="button">Score Info</a>
+      </div>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <div id="gameOverModal">
+      <div class="modal-content">
+        <h1>Game Over</h1>
+        <p>Your score: <span id="finalScore"></span></p>
+        <a href="score.html" class="button">Score Info</a>
+        <a href="#" onClick="startGameAgain()" class="button">Play Again</a>
+        <a href="index.html" class="button">Exit</a>
+      </div>
+    </div>
+    <script>
+      function adjustCanvasSize() {
+        const canvas = document.getElementById("gameCanvas");
+        canvas.width = window.innerWidth;
+        canvas.height =
+          window.innerHeight - document.querySelector(".top-bar").offsetHeight;
+      }
+      window.onresize = adjustCanvasSize;
+      adjustCanvasSize();
+      document.getElementById("playerNameDisplay").innerText =
+        localStorage.getItem("currentPlayer") || "Unknown Player";
+      // Game logic is in game.js
+    </script>
+    <script src="js/game.js"></script>
+  </body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Game of Thrones Fan Site</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        body {
+            background-image: url('../images/westeros-bg.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .main-content {
+            width: 70%;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            animation: fadeIn 2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .quiz-question {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .answers label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        .timer {
+            font-size: 18px;
+            color: #444;
+        }
+        #submit {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            border:none;
+            background-color: #8B0000;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #submit:hover {
+            background-color: #A52A2A;
+        }
+    </style>
+</head>
+<body>
+    <header class="animate__animated animate__fadeInDown" style="background-color: rgba(138, 8, 8, 0.9); color: white; text-align: center; padding: 20px 0;">
+        <h1>Game of Thrones Quiz</h1>
+    </header>
+    <nav style="background-color: rgba(47, 79, 79, 0.9);">
+        <ul style="list-style-type: none; padding: 0; margin: 0; display: flex; justify-content: center;">
+            <li style="margin: 0 15px;"><a style="color: white; text-decoration: none;" href="../index.html">Home</a></li>
+            <li style="margin: 0 15px;"><a style="color: white; text-decoration: none;" href="calculator.html">Calculator</a></li>
+            <li style="margin: 0 15px;"><a style="color: white; text-decoration: none;" href="quiz.html">Quiz Game</a></li>
+        </ul>
+    </nav>
+    <main class="main-content">
+        <section id="quiz-container" class="animate__animated animate__fadeIn">
+            <h2>Test Your Knowledge</h2>
+            <div id="quiz"></div>
+            <button id="submit">Submit Answer</button>
+            <div id="results" class="animate__animated animate__zoomIn"></div>
+        </section>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const quizContainer = document.getElementById('quiz');
+            const resultsContainer = document.getElementById('results');
+            const submitButton = document.getElementById('submit');
+            const myQuestions = [
+                {
+                    question: "Who rules the Iron Throne at the start of the series?",
+                    answers: { a: "Ned Stark", b: "Robert Baratheon", c: "Joffrey Baratheon" },
+                    correctAnswer: "b"
+                },
+                {
+                    question: "What is the ancestral home of House Lannister?",
+                    answers: { a: "King's Landing", b: "Casterly Rock", c: "The Arbour" },
+                    correctAnswer: "b"
+                },
+            ];
+
+            let currentQuestionIndex = 0;
+            let timerInterval;
+
+            function buildQuiz() {
+                const currentQuestion = myQuestions[currentQuestionIndex];
+                const answers = [];
+
+                for (let letter in currentQuestion.answers) {
+                    answers.push(
+                        `<label>
+                            <input type="radio" name="question" value="${letter}">
+                            ${letter}: 
+                            ${currentQuestion.answers[letter]}
+                        </label>`
+                    );
+                }
+
+                quizContainer.innerHTML = `<div class="quiz-question"> ${currentQuestion.question} </div>
+                                          <div class="answers"> ${answers.join('')} </div>
+                                          <div class="timer" id="timer">30s remaining</div>`;
+
+                startTimer();
+            }
+
+            function startTimer() {
+                let timeLeft = 30;
+                const timerDisplay = document.getElementById('timer');
+
+                timerInterval = setInterval(() => {
+                    timerDisplay.textContent = `${timeLeft--}s remaining`;
+
+                    if (timeLeft < 0) {
+                        clearInterval(timerInterval);
+                        moveToNextQuestion();
+                    }
+
+                }, 1000);
+            }
+
+            function showResults() {
+                clearInterval(timerInterval);
+                const answerContainer = quizContainer.querySelector('.answers');
+                const selector = `input[name=question]:checked`;
+                const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+                if (userAnswer === myQuestions[currentQuestionIndex].correctAnswer) {
+                    resultsContainer.innerHTML = '<span style="color: green">Correct!</span>';
+                } else {
+                    resultsContainer.innerHTML = '<span style="color: red">Wrong!</span>';
+                }
+
+                setTimeout(() => {
+                    if (currentQuestionIndex < myQuestions.length - 1) {
+                        resultsContainer.innerHTML = '';
+                        currentQuestionIndex++;
+                        buildQuiz();
+                    } else {
+                        resultsContainer.innerHTML = 'Quiz Completed!';
+                        submitButton.disabled = true;
+                    }
+                }, 2000);
+            }
+
+            function moveToNextQuestion() {
+                resultsContainer.innerHTML = '<span style="color: orange">Time is up, moving to next question.</span>';
+                currentQuestionIndex++;
+
+                if (currentQuestionIndex < myQuestions.length) {
+                    setTimeout(() => {
+                        resultsContainer.innerHTML = '';
+                        buildQuiz();
+                    }, 2000);
+                } else {
+                    resultsContainer.innerHTML = 'Quiz Completed!';
+                }
+            }
+
+            submitButton.addEventListener('click', showResults);
+
+            buildQuiz();
+        });
+    </script>
+    <footer class="animate__animated animate__fadeInUp" style="background-color: rgba(139, 0, 0, 0.9); color: white; text-align: center; padding: 20px 0;">
+        <p>&copy; 2023 Game of Thrones Fan Site</p>
+    </footer>
+</body>
+</html>

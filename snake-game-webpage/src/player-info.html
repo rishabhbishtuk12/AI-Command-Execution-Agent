@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Player Info</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      body {
+        background-color: #a8e6a8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        text-align: center;
+        background-color: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+        width: 90%;
+        padding: 15px;
+        font-size: 18px;
+        border: 2px solid #006400;
+        border-radius: 5px;
+        outline: none;
+        margin-bottom: 20px;
+      }
+      .button {
+        display: inline-block;
+        margin: 10px;
+        padding: 15px 30px;
+        font-size: 18px;
+        color: #ffffff;
+        background-color: #006400;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+      }
+      .button:hover {
+        background-color: #004d00;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Enter Player Information</h1>
+      <form id="playerForm">
+        <input
+          type="text"
+          id="playerName"
+          name="playerName"
+          placeholder="Enter your name"
+          required
+        />
+        <button type="submit" class="button">Start Game</button>
+      </form>
+      <a href="index.html" class="button">Back</a>
+    </div>
+    <script>
+      document
+        .getElementById("playerForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const playerName = document.getElementById("playerName").value;
+          localStorage.setItem("currentPlayer", playerName);
+          window.location.href = "game.html";
+        });
+    </script>
+  </body>
+</html>

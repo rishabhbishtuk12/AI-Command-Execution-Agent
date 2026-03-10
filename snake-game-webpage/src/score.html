@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Score History</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: #a8e6a8;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+        table {
+            margin-top: 20px;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 90%;
+            background-color: white;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        table, th, td {
+            border-left: 1px solid #006400;
+            border-top: 1px solid #006400;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        th {
+            background-color: #d4edda;
+        }
+        th:first-child, td:first-child {
+            border-left: none;
+        }
+        .medal {
+            font-size: 18px;
+            margin-right: 5px;
+        }
+        .button {
+            display: inline-block;
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #006400;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #004d00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Player Score History</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Player Name</th>
+                    <th>Score</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="scoreTableBody">
+                <!-- Score history will populate here -->
+            </tbody>
+        </table>
+        <a href="index.html" class="button">Back</a>
+    </div>
+    <script>
+        const scores = JSON.parse(localStorage.getItem('scoreHistory') || '[]').sort((a, b) => b.score - a.score);
+        const scoreTableBody = document.getElementById('scoreTableBody');
+
+        const medalEmojis = ['🥇', '🥈', '🥉'];
+
+        scores.forEach((score, index) => {
+            const row = document.createElement('tr');
+            const medal = index < 3 ? `<span class="medal">${medalEmojis[index]}</span>` : '';
+            row.innerHTML = `<td>${medal}${score.name}</td><td>${score.score}</td><td>${score.date}</td>`;
+            scoreTableBody.appendChild(row);
+        });
+    </script>
+</body>
+</html>
